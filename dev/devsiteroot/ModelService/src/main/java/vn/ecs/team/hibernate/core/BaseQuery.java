@@ -74,7 +74,7 @@ public class BaseQuery<KEY, T> implements QueryInf<KEY, T> {
 	public T findById(KEY id) {
 		try{
 			tranx.startTransaction();
-			T t = getSession().find(this.entityClass, (Serializable)id);
+			T t = (T) getSession().get(this.entityClass, (Serializable)id);
 			tranx.commit();	
 			return t;
 		}catch(Exception e){

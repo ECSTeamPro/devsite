@@ -2,10 +2,12 @@ package vn.ecs.team.hibernate.core;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.metamodel.MetadataSources;
+import org.hibernate.service.ServiceRegistry;
+import org.hibernate.service.ServiceRegistryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,20 +18,16 @@ public class HibernateSessionFactory {
 	private static org.hibernate.SessionFactory sessionFactory;
 
 	private static Configuration configuration = new Configuration();
-	private static StandardServiceRegistry registry;
+	private static ServiceRegistry serviceRegistry;
 
 	static {
 		try {
 			configuration.configure();
-			StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure() // configures
-																								// settings
-																								// from
-																								// hibernate.cfg.xml
-					.build();
-			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+			serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
+			sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 		} catch (Exception e) {
 			log.error("Error Creating SessionFactory", e);
-			StandardServiceRegistryBuilder.destroy(registry);
+			//.destroy(registry);
 		}
 	}
 
@@ -53,15 +51,11 @@ public class HibernateSessionFactory {
 
 		try {
 			configuration.configure();
-			StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure() // configures
-																								// settings
-																								// from
-																								// hibernate.cfg.xml
-					.build();
-			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+			serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
+			sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 		} catch (Exception e) {
 			log.error("Error Creating SessionFactory", e);
-			StandardServiceRegistryBuilder.destroy(registry);
+//			StandardServiceRegistryBuilder.destroy(registry);
 		}
 	}
 
