@@ -1,8 +1,22 @@
 package vn.ecs.team.hibernate.core;
 
 import java.util.List;
+import java.util.Map;
+
+import org.hibernate.type.DateType;
+import org.hibernate.type.DoubleType;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 public interface QueryInf<KEY, T> {
+	
+	public static DoubleType TYPE_DOUBLE = DoubleType.INSTANCE;
+	public static IntegerType TYPE_INTEGER = IntegerType.INSTANCE;
+	public static LongType TYPE_LONG = LongType.INSTANCE;
+	public static StringType TYPE_STRING = StringType.INSTANCE;
+	public static DateType TYPE_DATE = DateType.INSTANCE;
+	
 	
 	public void save(T t);
 	
@@ -16,6 +30,17 @@ public interface QueryInf<KEY, T> {
 	
 	public List<T> findByProperty(String property, Object value);
 	
+	public List<T> findByProperties(List<Object[]> properties, String[] groupBys, String[] orderBys, int limit);
+	
 	public List<T> findAll();
 	
+	public Long count();
+	
+	public Long countByProperty(String property, Object value);
+	
+	public Long countByProperties(List<Object[]> properties);
+	
+	public List<T> buildSQL(String sql, Map<String, Object> scalar);
+	
+	public List<T> buildHQL(String hql);
 }
