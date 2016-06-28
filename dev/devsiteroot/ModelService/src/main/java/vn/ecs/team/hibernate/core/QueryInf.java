@@ -40,7 +40,7 @@ public interface QueryInf<KEY, T> {
 	
 	public Long countByProperties(List<Object[]> properties);
 	
-	public List<T> buildSQL(String sql, Map<String, Object> scalar);
+	public <K> List<K> buildSQL(String sql, Map<String, Object> scalar, Class dto);
 	
 	public List<T> buildHQL(String hql);
 }

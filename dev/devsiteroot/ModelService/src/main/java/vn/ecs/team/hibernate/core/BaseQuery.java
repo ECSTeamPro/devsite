@@ -3,9 +3,16 @@ package vn.ecs.team.hibernate.core;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.DateType;
+import org.hibernate.type.DoubleType;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.StringType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -260,12 +267,53 @@ public class BaseQuery<KEY, T> implements QueryInf<KEY, T> {
 	}
 
 	@Override
-	public List<T> buildSQL(String sql, Map<String, Object> scalar) {
-		// TODO Auto-generated method stub
-		log("Method: buildSQL not support", null, 0);
+	public <K> List<K> buildSQL(String sql, Map<String, Object> scalar, Class dto) {
+		if(sql == null || sql.isEmpty()){
+			log("sql cannot be null", null, 0);
+			//can throw exception here
+			return null;
+		}
+		try{
+			SQLQuery query = getSession().createSQLQuery(sql);
+			if(scalar != null && !scalar.isEmpty()){
+				//add scalar for dto
+				Set<String> keys = scalar.keySet();
+				for(String key: keys){
+					Object value = scalar.get(key);
+					buildScalarForSqlQuery(query, key, value);
+				}
+				query.setResultTransformer(Transformers.aliasToBean(dto));
+			}
+			
+			return query.list();
+			
+		}catch(Exception e){
+			log("build sql error", e.getMessage(), 0);
+		}
+		//log("Method: buildSQL not support", null, 0);
 		return null;
 	}
 
+	private void buildScalarForSqlQuery(SQLQuery query, String key, Object value){
+		//check instance of value to add exactly scalar with dto 
+		if(value instanceof StringType){
+			query.addScalar(key, TYPE_STRING);
+			return;
+		}
+		if(value instanceof DoubleType){
+			query.addScalar(key, TYPE_DOUBLE);
+			return;
+		}
+		if(value instanceof IntegerType){
+			query.addScalar(key, TYPE_INTEGER);
+			return;
+		}
+		if(value instanceof DateType){
+			query.addScalar(key, TYPE_DATE);
+			return;
+		}
+	}
+	
 	@Override
 	public List<T> buildHQL(String hql) {
 		// TODO Auto-generated method stub
