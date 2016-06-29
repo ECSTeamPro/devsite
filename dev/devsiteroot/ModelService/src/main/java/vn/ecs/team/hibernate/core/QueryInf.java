@@ -42,5 +42,5 @@ public interface QueryInf<KEY, T> {
 	
 	public <K> List<K> buildSQL(String sql, Map<String, Object> scalar, Class dto);
 	
-	public List<T> buildHQL(String hql);
+	public List<T> buildHQL(Map<String, Object> params);
 }

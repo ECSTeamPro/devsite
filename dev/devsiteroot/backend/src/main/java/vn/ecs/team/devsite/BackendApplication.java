@@ -53,13 +53,25 @@ public class BackendApplication {
 		
 		//
 		System.out.println("test function build sql not with scalar");
-		List<User> lstUser = dao.buildSQL("select * from User", null, null);
+		List<User> lstUser = dao.buildSQL("select * from User", null, User.class);
 		if(lstUser == null || lstUser.size() == 0)
 			System.out.println("null");
 		else{
 			User dto = lstUser.get(0);
 			System.out.println(dto.getUsername() + " " + dto.getPassword() + " " + dto.getPhone());
 		}
+		
+		System.out.println("HQL");
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("username", "admin");
+		List<User> lu = dao.buildHQL(params);
+		if(lu == null || lu.size() == 0)
+			System.out.println("null");
+		else{
+			User dto = lu.get(0);
+			System.out.println(dto.getUsername() + " " + dto.getPassword() + " " + dto.getPhone());
+		}
+
 		// 
 	}
 }

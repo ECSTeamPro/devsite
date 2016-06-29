@@ -274,6 +274,7 @@ public class BaseQuery<KEY, T> implements QueryInf<KEY, T> {
 			return null;
 		}
 		try{
+			tranx.startTransaction();
 			SQLQuery query = getSession().createSQLQuery(sql);
 			if(scalar != null && !scalar.isEmpty()){
 				//add scalar for dto
@@ -284,10 +285,16 @@ public class BaseQuery<KEY, T> implements QueryInf<KEY, T> {
 				}
 				query.setResultTransformer(Transformers.aliasToBean(dto));
 			}
+			if(scalar == null)
+				query.addEntity(dto);
 			
-			return query.list();
+			List lst = query.list();
+			tranx.commit();
+			return lst;
 			
 		}catch(Exception e){
+			//e.printStackTrace();
+			tranx.rollback();
 			log("build sql error", e.getMessage(), 0);
 		}
 		//log("Method: buildSQL not support", null, 0);
@@ -315,9 +322,37 @@ public class BaseQuery<KEY, T> implements QueryInf<KEY, T> {
 	}
 	
 	@Override
-	public List<T> buildHQL(String hql) {
-		// TODO Auto-generated method stub
-		log("Method: buildHQL not support", null, 0);
+	public List<T> buildHQL(Map<String, Object> params) {
+
+		StringBuilder sb = new StringBuilder(" from " + getEntity().getName() + " u ");
+		if(params != null && params.size() != 0){
+			sb.append(" where ");
+			Set<String> keys = params.keySet();
+			int i = 0;
+			for(String key : keys){
+				sb.append("u."+key+"= :"+key);
+				i++;
+				if(i < keys.size() - 1) sb.append(" and ");
+			}
+		}
+		try{
+			tranx.startTransaction();
+			Query query = getSession().createQuery(sb.toString());
+			if(params != null && params.size() != 0){
+				Set<String> keys = params.keySet();
+				for(String key : keys){
+					query.setParameter(key, params.get(key));
+				}
+			}
+
+			List lst = query.list();
+			tranx.commit();
+			return lst;
+		}catch(Exception e){
+			tranx.rollback();
+			log("buildHQL error", e.getMessage(), 0);
+		}
+		//log("Method: buildHQL not support", null, 0);
 		return null;
 	}
 
