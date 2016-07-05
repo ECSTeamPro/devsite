@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.thymeleaf.org ">
+<head>
+<link rel="stylesheet" type="text/css" href="css/login.css" />
+</head>
+<body>
+	<div class="modal" id="login-modal">
+		<div class="modal-dialog">
+			<div class="loginmodal-container">
+				<h1>Login to Your Account</h1>
+				<br /> 
+				<form action="login" th:action="@{/login}" th:object="${user}" method="post">
+				<input type="text"  name="username" placeholder="Username" /> 
+				<input type="password" name="password" placeholder="Password" /> 
+				
+				<input
+					type="submit" name="login" class="login loginmodal-submit"
+					value="Login" />
+
+				</form>
+				<div class="login-help">
+					<a href="#">Register</a> - <a href="#">Forgot Password</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
