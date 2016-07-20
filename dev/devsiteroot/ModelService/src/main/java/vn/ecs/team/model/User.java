@@ -1,14 +1,29 @@
 package vn.ecs.team.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.NamedQuery;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 
 /**
  * The persistent class for the user database table.
  * 
  */
+
+@Component
+@Scope("session")
 @Entity
 @NamedQuery(name="User.findAll", query="SELECT u FROM User u")
 public class User implements Serializable {
@@ -167,4 +182,11 @@ public class User implements Serializable {
 		this.username = username;
 	}
 
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", address=" + address + ", email=" + email + ", fullname=" + fullname + ", password="
+				+ password + ", status=" + status + ", username=" + username + "]";
+	}
+
+	
 }
