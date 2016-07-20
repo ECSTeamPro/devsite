@@ -11,9 +11,9 @@
 		<property name="hibernate.hikari.maximumPoolSize">50</property>
 		<property name="hibernate.hikari.idleTimeout">600000</property>
 		<property name="hibernate.hikari.dataSourceClassName">com.mysql.jdbc.jdbc2.optional.MysqlDataSource</property>
-		<property name="hibernate.hikari.dataSource.url">jdbc:mysql://localhost:3306/devsite?UseUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true</property>
+		<property name="hibernate.hikari.dataSource.url">jdbc:mysql://128.199.232.0:3306/devsite?UseUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true</property>
 		<property name="hibernate.hikari.dataSource.user">root</property>
-		<property name="hibernate.hikari.dataSource.password">admin@123</property>
+		<property name="hibernate.hikari.dataSource.password"></property>
 		<property name="hibernate.connection.CharSet">utf8</property>
 		<property name="hibernate.connection.characterEncoding">utf8</property>
 		<property name="hibernate.connection.useUnicode">true</property>

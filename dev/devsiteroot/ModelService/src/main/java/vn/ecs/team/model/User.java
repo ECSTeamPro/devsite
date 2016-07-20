@@ -13,17 +13,11 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 
 /**
  * The persistent class for the user database table.
  * 
  */
-
-@Component
-@Scope("session")
 @Entity
 @NamedQuery(name="User.findAll", query="SELECT u FROM User u")
 public class User implements Serializable {

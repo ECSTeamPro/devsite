@@ -7,7 +7,11 @@ public class BaseService<T> implements ServiceInf<T> {
 	private BaseQuery<Integer, T> dao;
 
 	public BaseService() {
-		dao = new BaseQuery<Integer, T>();
+		
+	}
+	
+	public BaseService(Class c){
+		dao = new BaseQuery<Integer, T>(c);
 	}
 	
 	public BaseQuery getDao(){

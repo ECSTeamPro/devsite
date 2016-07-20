@@ -330,12 +330,13 @@ public class BaseQuery<KEY, T> implements QueryInf<KEY, T> {
 			Set<String> keys = params.keySet();
 			int i = 0;
 			for(String key : keys){
-				sb.append("u."+key+"= :"+key);
-				i++;
+				sb.append("u."+key+" = :"+key);
 				if(i < keys.size() - 1) sb.append(" and ");
+				i++;
 			}
 		}
 		try{
+			System.out.println("HQL: " + sb.toString());
 			tranx.startTransaction();
 			Query query = getSession().createQuery(sb.toString());
 			if(params != null && params.size() != 0){

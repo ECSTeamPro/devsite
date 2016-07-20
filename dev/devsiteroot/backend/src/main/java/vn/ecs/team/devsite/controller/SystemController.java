@@ -1,6 +1,7 @@
 package vn.ecs.team.devsite.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,8 +15,7 @@ import vn.ecs.team.service.UserService;
 @Controller
 public class SystemController {
 	private UserService userService;
-	@Autowired
-	private User user;
+	
 
 	public SystemController() {
 		userService = new UserService();
@@ -28,17 +28,19 @@ public class SystemController {
 	}
 
 	@RequestMapping(value = "/dashboard")
-	public String dashboard() {
+	public String dashboard(HttpServletRequest request) {
 		System.out.println("go to dashboard");
+		User user = (User) request.getSession().getAttribute("user");
 		System.out.println(user.toString());
 		return ControllerMapping.System.MAIN;
-	}
+	} 
 
 	@RequestMapping(value = "/login", name = "main", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded; charset=utf-8")
-	public String login(@ModelAttribute(value = "user") UserDto user) {
-		this.user = userService.checkLogin(user.getUsername(), user.getPassword());
-		if (this.user == null)
-			return "redirect:/login";
+	public String login(@ModelAttribute(value = "user") UserDto user, HttpServletRequest request) {
+		User u = userService.checkLogin(user.getUsername(), user.getPassword());
+		if (u == null)
+			return "redirect:/index.html";
+		request.getSession().setAttribute("user", u);
 		return "redirect:/dashboard";
 	}
 }
